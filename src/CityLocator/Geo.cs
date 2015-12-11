@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using NUnit.Framework;
 
 namespace CityLocator
 {
@@ -27,6 +26,28 @@ namespace CityLocator
                 }
                 zone.Add(name);    
             }
+        }
+
+        IEnumerable<GeoName> FetchNames(string path)
+        {
+            using (var fs = File.Open(path, FileMode.Open, FileAccess.Read))
+            using (var bs = new BufferedStream(fs))
+            using (var sr = new StreamReader(bs))
+            {
+                string line;
+                while ((line = sr.ReadLine()) != null)
+                {
+                    yield return GeoName.Load(line);
+                }
+            }
+        } 
+
+        public void Initialize(string path)
+        {
+            if(File.Exists(path) == false)
+                throw new InvalidOperationException($"File not found {path}");
+
+            Initialize(FetchNames(path));
         }
 
         List<GeoName> FindClosestZone(float latitude, float longitude)
