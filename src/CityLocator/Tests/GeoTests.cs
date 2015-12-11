@@ -3,7 +3,8 @@ using NUnit.Framework;
 
 namespace CityLocator.Tests
 {
-    class GeoTests
+    [TestFixture]
+    public class GeoTests
     {
         const float LatitudeOdessa = 46.4774704f;
         const float LongitudeOdessa = 30.7326202f;
@@ -16,6 +17,7 @@ namespace CityLocator.Tests
         const float LatitudeOvidiopol = 46.24998f;
         const float LongitudeOvidiopol = 30.44127f;
         const string NameOvidiopol = "Ovidiopol";
+
         [Test]
         public void Should_construct_geo_name_from_datasource()
         {
@@ -45,16 +47,19 @@ namespace CityLocator.Tests
         [Test]
         public void Should_reverse_coordinates_to_geo_name()
         {
-            var geo = new Geo(new []
+            var geo = new Geo();
+            geo.Initialize(new[]
             {
-                new GeoName { Name = NameOdessa,    Latitude = LatitudeOdessa,    Longitude = LongitudeOdessa },
-                new GeoName { Name = NameKuchurhan, Latitude = LatitudeKuchurhan, Longitude = LongitudeKuchurhan },
-                new GeoName { Name = NameOvidiopol, Latitude = LatitudeOvidiopol, Longitude = LongitudeOvidiopol },
+                new GeoName { CountryCode = "UA", Name = NameOdessa,    Latitude = LatitudeOdessa,    Longitude = LongitudeOdessa },
+                new GeoName { CountryCode = "UA", Name = NameKuchurhan, Latitude = LatitudeKuchurhan, Longitude = LongitudeKuchurhan },
+                new GeoName { CountryCode = "UA", Name = NameOvidiopol, Latitude = LatitudeOvidiopol, Longitude = LongitudeOvidiopol },
             });
 
-            var x = geo.Reverse(46.022189f, 30.372775f);
+            var nameInBoundaries = geo.Reverse(46.022189f, 30.372775f);
+            Assert.AreEqual(NameOvidiopol, nameInBoundaries.Name);
 
-            Assert.AreEqual(NameOvidiopol, x.Name);
+            var nameOutOfBoundaries = geo.Reverse(36.888045f, -92.756167f); 
+            Assert.AreEqual("UA", nameOutOfBoundaries.CountryCode); // US, Missouri
         }
     }
 }
