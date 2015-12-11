@@ -30,7 +30,10 @@ namespace CityLocator
             if(string.IsNullOrWhiteSpace(input))
                 throw new ArgumentException("Input string could not be null or empty", nameof(input));
 
-            var fields = input.Split(new [] {' '}, StringSplitOptions.RemoveEmptyEntries);
+            var fields = input.Split('\t');
+
+            if(fields.Length != 19)
+                throw new FormatException("Insufficient fields numbber");
 
             return new GeoName
             {
@@ -38,7 +41,7 @@ namespace CityLocator
                 CountryCode = fields[8],
                 Latitude = float.Parse(fields[4], CultureInfo.InvariantCulture),
                 Longitude = float.Parse(fields[5], CultureInfo.InvariantCulture),
-                // Population = long.Parse(fields[14]) // Available for large cities only. TODO: Check by Feature class/code
+                Population = string.IsNullOrWhiteSpace(fields[14]) ? 0 : long.Parse(fields[14])
             };
         }
     }

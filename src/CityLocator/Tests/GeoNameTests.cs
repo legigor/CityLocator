@@ -7,12 +7,13 @@ namespace CityLocator.Tests
         [Test]
         public void Should_load_all_fields_from_the_String_in_the_data_file()
         {
-            var record = GeoName.Load("704697  Kotlovyna   Kotlovyna   Bolboaca,Bolboaka,Bolboka,Bulboka,Kotlovina,Kotlovyna,Котловина 45.50661    28.5747 P   PPL UA      17              0       29  Europe/Kiev 2015-01-07");
+            var record = GeoName.Load("698740	Odessa	Odessa	Ades,Gorad Adehsa,ODS,Odesa,Odess,Odessa,Odessae,Odesse,Odessos,Odessus,Odessza,Oděsa,Udessa,ao de sa,awdsa,awdysa,odesa,odessa,Ódessa,Οδησσός,Горад Адэса,Одеса,Одесс,Одессæ,Одесса,Одессе,Օդեսա,אדעס,אודסה,أوديسا,اودسا,اوديسا,اودیسا,ओदेसा,အိုဒက်ဆာမြို့,ოდესა,オデッサ,敖德薩,오데사	46.47747	30.73262	P	PPLA	UA		17				1001558		58	Europe/Kiev	2015-02-06");
 
-            Assert.AreEqual("Kotlovyna", record.Name);
+            Assert.AreEqual("Odessa", record.Name);
             Assert.AreEqual("UA", record.CountryCode);
-            Assert.AreEqual(45.50661f, record.Latitude);
-            Assert.AreEqual(28.5747f, record.Longitude);
+            Assert.AreEqual(46.4774704f, record.Latitude);
+            Assert.AreEqual(30.7326202f, record.Longitude);
+            Assert.AreEqual(1001558, record.Population);
         }
     }
 }

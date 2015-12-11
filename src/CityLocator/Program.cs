@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using NUnit.Framework;
+using Stopwatch = System.Diagnostics.Stopwatch;
 
 namespace CityLocator
 {
@@ -11,6 +9,11 @@ namespace CityLocator
     {
         static void Main(string[] args)
         {
+            var sw = Stopwatch.StartNew();
+
+            var allCities = File.ReadAllLines(@"C:\temp\geo\ua.txt").Select(GeoName.Load).ToArray();
+
+            Console.WriteLine($"Loaded {allCities.Length} cities in {sw.Elapsed}");
         }
     }
 }
