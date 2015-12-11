@@ -3,19 +3,30 @@ using NUnit.Framework;
 
 namespace CityLocator.Tests
 {
-    public class GeoNameTests
+    class GeoTests
     {
+        const float LatitudeOdessa = 46.4774704f;
+        const float LongitudeOdessa = 30.7326202f;
+        const string NameOdessa = "Odessa";
+
+        const float LatitudeKuchurhan = 47.16302f;
+        const float LongitudeKuchurhan = 29.78937f;
+        const string NameKuchurhan = "Kuchurhan";
+
+        const float LatitudeOvidiopol = 46.24998f;
+        const float LongitudeOvidiopol = 30.44127f;
+        const string NameOvidiopol = "Ovidiopol";
         [Test]
-        public void Should_load_all_fields_from_the_String_in_the_data_file()
+        public void Should_construct_geo_name_from_datasource()
         {
             var record = GeoName.Load("698740	Odessa	Odessa	Ades,Gorad Adehsa,ODS,Odesa,Odess,Odessa,Odessae,Odesse,Odessos,Odessus,Odessza,Oděsa,Udessa,ao de sa,awdsa,awdysa,odesa,odessa,Ódessa,Οδησσός,Горад Адэса,Одеса,Одесс,Одессæ,Одесса,Одессе,Օդեսա,אדעס,אודסה,أوديسا,اودسا,اوديسا,اودیسا,ओदेसा,အိုဒက်ဆာမြို့,ოდესა,オデッサ,敖德薩,오데사	46.47747	30.73262	P	PPLA	UA		17				1001558		58	Europe/Kiev	2015-02-06");
 
             Assert.AreEqual(698740, record.GeoNameId);
-            Assert.AreEqual("Odessa", record.Name);
-            Assert.AreEqual("Odessa", record.AsciiName);
+            Assert.AreEqual(NameOdessa, record.Name);
+            Assert.AreEqual(NameOdessa, record.AsciiName);
             Assert.AreEqual("Ades,Gorad Adehsa,ODS,Odesa,Odess,Odessa,Odessae,Odesse,Odessos,Odessus,Odessza,Oděsa,Udessa,ao de sa,awdsa,awdysa,odesa,odessa,Ódessa,Οδησσός,Горад Адэса,Одеса,Одесс,Одессæ,Одесса,Одессе,Օդեսա,אדעס,אודסה,أوديسا,اودسا,اوديسا,اودیسا,ओदेसा,အိုဒက်ဆာမြို့,ოდესა,オデッサ,敖德薩,오데사", record.AlternateNames);
-            Assert.AreEqual(46.4774704f, record.Latitude);
-            Assert.AreEqual(30.7326202f, record.Longitude);
+            Assert.AreEqual(LatitudeOdessa, record.Latitude);
+            Assert.AreEqual(LongitudeOdessa, record.Longitude);
             Assert.AreEqual("P", record.FeatureClass);
             Assert.AreEqual("PPLA", record.FeatureCode);
             Assert.AreEqual("UA", record.CountryCode);
@@ -29,6 +40,21 @@ namespace CityLocator.Tests
             Assert.AreEqual("58", record.Dem);
             Assert.AreEqual("Europe/Kiev", record.Timezone);
             Assert.AreEqual(new DateTime(2015, 2, 6), record.ModificationDate);
+        }
+
+        [Test]
+        public void Should_reverse_coordinates_to_geo_name()
+        {
+            var geo = new Geo(new []
+            {
+                new GeoName { Name = NameOdessa,    Latitude = LatitudeOdessa,    Longitude = LongitudeOdessa },
+                new GeoName { Name = NameKuchurhan, Latitude = LatitudeKuchurhan, Longitude = LongitudeKuchurhan },
+                new GeoName { Name = NameOvidiopol, Latitude = LatitudeOvidiopol, Longitude = LongitudeOvidiopol },
+            });
+
+            var x = geo.Reverse(46.022189f, 30.372775f);
+
+            Assert.AreEqual(NameOvidiopol, x.Name);
         }
     }
 }
