@@ -24,7 +24,8 @@ namespace CityLocator
                     zone = new List<GeoName>();
                     _zones.Add(key, zone);
                 }
-                zone.Add(name);    
+
+                zone.Add(name);
             }
         }
 
@@ -94,7 +95,7 @@ namespace CityLocator
 
             public static ZoneKey Create(float latitude, float longitude)
             {
-                const int precition = 20;
+                const int precition = 2;
 
                 return new ZoneKey
                 {
